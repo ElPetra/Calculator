@@ -18,35 +18,35 @@ function clearAll() {
   screen.textContent = 0;
 }
 
-function deleteLast(x, s, y) {
-    if (x && !y && !s) {
-    x = x.slice(0, -1);
-      screen.textContent = x; 
-      console.log(x);  
-      return x;
-    }
-      if (x && y && s) {
-        s = s.slice(0, -1);
-        screen.textContent = s;
-        console.log(s);
-        return s;
-    }
-      if (x && y && !s) {
-        y = y.slice(0, -1);
-        screen.textContent = y;
-        console.log(y);
-        return y;
-    }
-    return (x, s, y);
-} 
+// function deleteLast(x, s, y) {
+//     if (x && !y && !s) {
+//     x = x.slice(0, -1);
+//       screen.textContent = x; 
+//       console.log(x);  
+//       return x;
+//     }
+//       if (x && y && s) {
+//         s = s.slice(0, -1);
+//         screen.textContent = s;
+//         console.log(s);
+//         return s;
+//     }
+//       if (x && y && !s) {
+//         y = y.slice(0, -1);
+//         screen.textContent = y;
+//         console.log(y);
+//         return y;
+//     }
+//     return (x, s, y);
+// } 
 
 delAllbtn.addEventListener("click", function () {
   clearAll();
 });
 
-delLastBtn.addEventListener("click", function () {
-  deleteLast(a, sign, b);
-});
+// delLastBtn.addEventListener("click", function () {
+//   deleteLast(a, sign, b);
+// });
 
 buttons.map((button) => {
   button.addEventListener("click", (event) => {
@@ -102,12 +102,30 @@ buttons.map((button) => {
       return;
     }
 
-    //удаление последнего элемента, может оно тут и не нужно?!
+    //удаление последнего элемента
     if (event.target.classList.contains("arrow")) {
-        deleteLast(a, sign, b);
+        if (a && !sign && !b) {
+          a = a.slice(0, -1);
+          screen.textContent = a;
+          console.log(a);
+          return a;
+        }
+          if (a && sign && !b) {
+            sign = sign.slice(0, -1);
+            screen.textContent = sign;
+            console.log(sign);
+            return sign;
+          }
+          if (a && sign && b) {
+            b = b.slice(0, -1);
+            screen.textContent = b;
+            console.log(b);
+            return b;
+          }
+          return a, sign, b; 
     }
 
-    if (key === "=") {
+    if (key === "=" || key === "-") {
       //вычисления
       if (b === "") b = a;
       switch (sign) {
@@ -116,7 +134,7 @@ buttons.map((button) => {
           break;
         case "-":
           a = a - b;
-          break;
+          return a;
         case "x":
           a = a * b;
           break;
@@ -133,6 +151,8 @@ buttons.map((button) => {
         case "%":
           a = (a * b) / 100;
           break;
+        default:
+          return;
       }
       finish = true;
       screen.textContent = a;
