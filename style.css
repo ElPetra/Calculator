@@ -3,9 +3,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-input {
-  all: unset;
-}
 .calc {
     margin: 50px auto;
     max-width: min-content;
@@ -35,24 +32,11 @@ input {
     justify-items: start;
     align-items: start;
 }
-
 .calc-screen p {
     text-align: right;
     font-size: 4rem;
     margin: 0;
 }
-/* #display {
-    width: 100%;
-    height: 100%;
-    text-align: left;
-    font-size: 24px;
-    background-color: black;
-} */
-/* #display::placeholder {
-    color: white;
-    font-family: Arial;
-    font-size: 50px;
-} */
 .buttons {
     display: grid;
     grid-template-areas: 
@@ -64,7 +48,6 @@ input {
     grid-gap: 7px;
     justify-items: center;
 }
-
 .btn {
     width: 60px;
     height: 60px;
@@ -77,7 +60,6 @@ input {
     user-select: none;
     border: rgb(149, 205, 229) solid 1px;
 }
-
 .btn_big {
     grid-area: equal;
     width: 100%;
@@ -87,7 +69,6 @@ input {
 .btn:hover {
     filter: brightness(120%);
 }
-
 .btn:active {
     filter: brightness(90%);
 }

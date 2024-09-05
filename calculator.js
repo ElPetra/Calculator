@@ -6,10 +6,12 @@ let a = "";
 let b = "";
 let sign = "";
 let finish = false;
+let firstResult = true;
 
 const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
 const action = ["-", "+", "x", "/", "%"];
 
+//очистка экрана
 function clearAll() {
   a = ""; 
   b = ""; 
@@ -18,35 +20,48 @@ function clearAll() {
   screen.textContent = 0;
 }
 
-// function deleteLast(x, s, y) {
-//     if (x && !y && !s) {
-//     x = x.slice(0, -1);
-//       screen.textContent = x; 
-//       console.log(x);  
-//       return x;
-//     }
-//       if (x && y && s) {
-//         s = s.slice(0, -1);
-//         screen.textContent = s;
-//         console.log(s);
-//         return s;
-//     }
-//       if (x && y && !s) {
-//         y = y.slice(0, -1);
-//         screen.textContent = y;
-//         console.log(y);
-//         return y;
-//     }
-//     return (x, s, y);
-// } 
+function count(){
+  if(firstResult){
+    switch (sign) {
+      case "+":
+        a = +a + +b;
+        console.log('test');
+        break;
+      case "-":
+        a = +a - +b;
+        console.log(a);
+        break;
+      case "x":
+        a = a * b;
+        break;
+      case "/":
+        if (b === "0") {
+          screen.textContent = "Ошибка";
+          a = "";
+          b = "";
+          sign = "";
+          return;
+        }
+        a = a / b;
+        break;
+      case "%":
+        a = (a * b) / 100;
+        break;
+      default:
+        return;
+    }
+    finish = true;
+    screen.textContent = a;
+    console.table(a, sign, b);
+    firstResult = false
+  } else {
+    screen.textContent = a;
+  }
+}
 
 delAllbtn.addEventListener("click", function () {
   clearAll();
 });
-
-// delLastBtn.addEventListener("click", function () {
-//   deleteLast(a, sign, b);
-// });
 
 buttons.map((button) => {
   button.addEventListener("click", (event) => {
@@ -91,15 +106,20 @@ buttons.map((button) => {
         screen.textContent = b;
       }
       console.table(`a=${a}, sign, b=${b}`);
+      firstResult = true;
       return;
     }
 
     // если нажата клавиша + - / *
     if (action.includes(key)) {
-      sign = key;
-      screen.textContent = sign;
-      console.table(a, sign, b);
-      return;
+      if(!b){
+        sign = key;
+        screen.textContent = sign;
+        console.table(a, sign, b);
+        return;
+      } else {
+        count()
+      }
     }
 
     //удаление последнего элемента
@@ -126,37 +146,7 @@ buttons.map((button) => {
     }
 
     if (key === "=" || key === "-") {
-      //вычисления
-      if (b === "") b = a;
-      switch (sign) {
-        case "+":
-          a = +a + +b;
-          break;
-        case "-":
-          a = a - b;
-          return a;
-        case "x":
-          a = a * b;
-          break;
-        case "/":
-          if (b === "0") {
-            screen.textContent = "Ошибка";
-            a = "";
-            b = "";
-            sign = "";
-            return;
-          }
-          a = a / b;
-          break;
-        case "%":
-          a = (a * b) / 100;
-          break;
-        default:
-          return;
-      }
-      finish = true;
-      screen.textContent = a;
-      console.table(a, sign, b);
+      count()
     }
   });
 });
