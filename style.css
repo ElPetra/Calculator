@@ -5,7 +5,7 @@
 }
 .calc {
     margin: 50px auto;
-    max-width: min-content;
+    max-width: 305px;
     width: 100%;
     height: min-content;
     border-radius: 10px;
@@ -34,8 +34,9 @@
 }
 .calc-screen p {
     text-align: right;
-    font-size: 4rem;
+    font-size: 60px;
     margin: 0;
+    max-width: 300px;
 }
 .buttons {
     display: grid;
