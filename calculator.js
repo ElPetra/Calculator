@@ -43,9 +43,10 @@ function count(){
         a = a * b;
         break;
       case "/":
-        if (b === "0") {
+        if (b == "0") {
+          console.log("деление на 0");
           screen.textContent = "Ошибка";
-          clearAll();
+          // clearAll();
           return;
         }
         a = a / b;
