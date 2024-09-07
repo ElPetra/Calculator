@@ -31,6 +31,7 @@
     display: grid;
     justify-items: start;
     align-items: start;
+    overflow: hidden;
 }
 .calc-screen p {
     text-align: right;

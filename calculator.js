@@ -9,37 +9,43 @@ let finish = false;
 let firstResult = true;
 
 const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
-const action = ["-", "+", "x", "/", "%"];
+const action = ["-", "+", "*", "/", "%"];
 
-//очистка экрана
+// Функция для изменения размера шрифта в зависимости от длины результата
+function adjustFontSize() {
+  if (screen.textContent.length > 8) {
+    screen.style.fontSize = "50px"; // Уменьшаем шрифт
+  } else {
+    screen.style.fontSize = "60px"; // Возвращаем исходный размер шрифта
+  }
+}
+
+// Очистка экрана
 function clearAll() {
   a = ""; 
   b = ""; 
   sign = ""; 
-  finish = false; //флаг
+  finish = false; 
   screen.textContent = 0;
+  adjustFontSize();
 }
 
 function count(){
-  if(firstResult){
+  if (firstResult) {
     switch (sign) {
       case "+":
         a = +a + +b;
-        console.log('test');
         break;
       case "-":
         a = +a - +b;
-        console.log(a);
         break;
-      case "x":
+      case "*":
         a = a * b;
         break;
       case "/":
         if (b === "0") {
           screen.textContent = "Ошибка";
-          a = "";
-          b = "";
-          sign = "";
+          clearAll();
           return;
         }
         a = a / b;
@@ -52,8 +58,8 @@ function count(){
     }
     finish = true;
     screen.textContent = a;
-    console.table(a, sign, b);
-    firstResult = false
+    firstResult = false;
+    adjustFontSize();  // Проверяем длину результата
   } else {
     screen.textContent = a;
   }
@@ -65,25 +71,23 @@ delAllbtn.addEventListener("click", function () {
 
 buttons.map((button) => {
   button.addEventListener("click", (event) => {
-    // нажата не кнопка
-    if (!event.target.classList.contains("btn")) return;
-    // нажата кнопка clearAll AC
-    if (event.target.classList.contains("ac")) return;
 
-    screen.textContent = "";
-    // получаю нажатую кнопку
+    if (!event.target.classList.contains("btn")) return;
+
     const key = event.target.textContent;
+
+    // Проверка, чтобы нельзя было вводить больше 8 цифр
+    if (a.length >= 8 && sign === "" && numbers.includes(key)) return;
+    if (b.length >= 8 && sign !== "" && numbers.includes(key)) return;
 
     // если нажата клавиша 0-9 или .
     if (numbers.includes(key)) {
       if (b === "" && sign === "") {
         if (key === "." && a.includes(".")) {
-          //проверка на .
           return;
         }
         if (a == "" && key == ".") {
-          a = "0" + a.slice(0); //вставляю 0, если нажать сразу .
-          a += key;
+          a = "0" + a;
         } else {
           a += key;
         }
@@ -94,59 +98,58 @@ buttons.map((button) => {
         screen.textContent = b;
       } else {
         if (key === "." && b.includes(".")) {
-          //проверка на .
           return;
         }
         if (b == "" && key == ".") {
-          b = "0" + b.slice(0); //вставляю 0, если нажать сразу .
-          b += key;
+          b = "0" + b;
         } else {
           b += key;
         }
         screen.textContent = b;
       }
-      console.table(`a=${a}, sign, b=${b}`);
+      
       firstResult = true;
       return;
     }
 
     // если нажата клавиша + - / *
     if (action.includes(key)) {
-      if(!b){
+      if (!b) {
         sign = key;
         screen.textContent = sign;
-        console.table(a, sign, b);
-        return;
       } else {
-        count()
+        count();
+        sign = key; // обновляем знак после вычисления
+        b = ""; // сбрасываем b для новой операции
+      }
+      return;
+    }
+
+    // Удаление последнего элемента
+    if (event.target.classList.contains("arrow")) {
+      if (a && !sign && !b) {
+        a = a.slice(0, -1);
+        screen.textContent = a || 0;
+        adjustFontSize();
+        return;
+      }
+      if (a && sign && !b) {
+        sign = "";
+        screen.textContent = a;
+        adjustFontSize();
+        return;
+      }
+      if (a && sign && b) {
+        b = b.slice(0, -1);
+        screen.textContent = b || sign;
+        adjustFontSize();
+        return;
       }
     }
 
-    //удаление последнего элемента
-    if (event.target.classList.contains("arrow")) {
-        if (a && !sign && !b) {
-          a = a.slice(0, -1);
-          screen.textContent = a;
-          console.log(a);
-          return a;
-        }
-          if (a && sign && !b) {
-            sign = sign.slice(0, -1);
-            screen.textContent = sign;
-            console.log(sign);
-            return sign;
-          }
-          if (a && sign && b) {
-            b = b.slice(0, -1);
-            screen.textContent = b;
-            console.log(b);
-            return b;
-          }
-          return a, sign, b; 
-    }
-
-    if (key === "=" || key === "-") {
-      count()
+    // Обработка нажатия на =
+    if (key === "=") {
+      count();
     }
   });
 });
