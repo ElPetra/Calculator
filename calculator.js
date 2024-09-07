@@ -9,7 +9,7 @@ let finish = false;
 let firstResult = true;
 
 const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
-const action = ["-", "+", "*", "/", "%"];
+const action = ["-", "+", "x", "/", "%"];
 
 // Функция для изменения размера шрифта в зависимости от длины результата
 function adjustFontSize() {
@@ -39,17 +39,22 @@ function count(){
       case "-":
         a = +a - +b;
         break;
-      case "*":
-        a = a * b;
+      case "x":
+        a = (a * b).toFixed(5);
+        if (a.toString().split(".")[1] == 0) {
+          a = Math.round(a)
+        }
         break;
       case "/":
         if (b == "0") {
-          console.log("деление на 0");
           screen.textContent = "Ошибка";
-          // clearAll();
+          //clearAll();
           return;
         }
         a = a / b;
+        if(a.toString().length >8){
+          a=a.toFixed(5);
+        }
         break;
       case "%":
         a = (a * b) / 100;
@@ -94,7 +99,7 @@ buttons.map((button) => {
         }
         screen.textContent = a;
       } else if (a !== "" && b !== "" && finish) {
-        b = key;
+        b += key;
         finish = false;
         screen.textContent = b;
       } else {
@@ -154,3 +159,8 @@ buttons.map((button) => {
     }
   });
 });
+
+
+
+
+
